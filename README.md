@@ -1,18 +1,39 @@
-# AI Text Classification System 🧠
+# 🧠 AI Sentiment Analysis System
 
-Project ini adalah aplikasi klasifikasi teks berbasis Machine Learning menggunakan Streamlit.
+Project ini adalah aplikasi berbasis web untuk klasifikasi sentimen teks menggunakan Machine Learning dan Streamlit.
 
-- Analisis teks tunggal
-- Upload CSV untuk batch processing
-- Visualisasi hasil
-- Download hasil analisis
+---
+
+🎯 Tujuan Project
+Project ini dibuat untuk Kerja Praktek (KP) dengan tujuan:
+- Menerapkan Machine Learning pada data teks
+- Membangun aplikasi web sederhana berbasis AI
+- Melakukan analisis sentimen otomatis
+
+---
+
+🚀 Fitur Utama
+
+- 📝 Analisis teks secara real-time (Positive / Negative / Neutral)
+- 📂 Upload file CSV untuk analisis banyak data sekaligus
+- 📊 Visualisasi hasil dalam bentuk grafik
+- 📈 Perhitungan persentase sentimen
+- ⬇️ Download hasil analisis ke file CSV
+
+---
+
+🛠️ Teknologi
 
 - Python
 - Streamlit
-- Scikit-learn
 - Pandas
+- Scikit-learn
+- Joblib
 
-```bash
+---
+
+📁 Cara Menjalankan
+
+```bash id="run1"
 pip install -r requirements.txt
-python train.py
-streamlit run app.py
+python -m streamlit run app.py
