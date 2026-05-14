@@ -54,29 +54,55 @@ st.markdown("""
         border-radius: 20px !important;
         border: 2px dashed rgba(255,255,255,0.3) !important;
     }
-    h3 { color: white !important; font-weight: 600 !important; }
+    h3 { 
+        color: white !important; 
+        font-weight: 600 !important; 
+    }
     .glow-text {
         font-size: 3.5rem;
         text-align: center;
         color: #1E3A8A;
         font-weight: 800;
     }
-    #MainMenu, footer, header {visibility: hidden;}
+    #MainMenu, footer, header {
+        visibility: hidden;
+    }
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<h1 class="glow-text">SENTIMENT ANALYZER</h1>', unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #1E3A8A !important; font-weight: 500; margin-bottom: 40px;'>Klasifikasi Teks Berbasis Kecerdasan Buatan</p>", unsafe_allow_html=True)
+st.markdown(
+    '<h1 class="glow-text">SENTIMENT ANALYZER</h1>',
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    "<p style='text-align: center; color: #1E3A8A !important; font-weight: 500; margin-bottom: 40px;'>Klasifikasi Teks Berbasis Kecerdasan Buatan</p>",
+    unsafe_allow_html=True
+)
 
 col1, col2 = st.columns(2, gap="large")
 
+# =========================
+# ANALISIS TUNGGAL
+# =========================
 with col1:
-    st.markdown('<div class="custom-card"><h3>📝 Analisis Tunggal</h3><p style="color: rgba(255,255,255,0.8);">Prediksi sentimen kalimat secara instan.</p></div>', unsafe_allow_html=True)
 
-    text_input = st.text_area("Input", placeholder="Ketik pesan Anda di sini...", height=150, label_visibility="collapsed")
+    st.markdown(
+        '<div class="custom-card"><h3>📝 Analisis Tunggal</h3><p style="color: rgba(255,255,255,0.8);">Prediksi sentimen kalimat secara instan.</p></div>',
+        unsafe_allow_html=True
+    )
+
+    text_input = st.text_area(
+        "Input",
+        placeholder="Ketik pesan Anda di sini...",
+        height=150,
+        label_visibility="collapsed"
+    )
 
     if st.button("ANALISIS SEKARANG"):
+
         if text_input.strip():
+
             prediction = model.predict([text_input.lower()])
             res_text = prediction[0]
 
@@ -90,35 +116,77 @@ with col1:
         else:
             st.warning("Silakan masukkan teks terlebih dahulu.")
 
+# =========================
+# ANALISIS BATCH
+# =========================
 with col2:
-    st.markdown('<div class="custom-card"><h3>📂 Analisis Batch</h3><p style="color: rgba(255,255,255,0.8);">Proses banyak data sekaligus via file CSV.</p></div>', unsafe_allow_html=True)
 
-    file = st.file_uploader("Upload", type=["csv"], label_visibility="collapsed")
+    st.markdown(
+        '<div class="custom-card"><h3>📂 Analisis Batch</h3><p style="color: rgba(255,255,255,0.8);">Proses banyak data sekaligus via file CSV.</p></div>',
+        unsafe_allow_html=True
+    )
+
+    file = st.file_uploader(
+        "Upload",
+        type=["csv"],
+        label_visibility="collapsed"
+    )
 
     if file:
+
         df = pd.read_csv(file)
 
         if "text" in df.columns:
 
             with st.spinner('Menganalisis...'):
-                df["hasil"] = model.predict(df["text"].astype(str).str.lower())
+
+                df["hasil"] = model.predict(
+                    df["text"].astype(str).str.lower()
+                )
 
             st.success("Analisis Selesai!")
 
-            st.write("📄 Preview Data")
-            st.dataframe(df.head())
+            # =========================
+            # HASIL ANALISIS DATA
+            # =========================
+            st.write("📄 Hasil Analisis Data")
 
+            # Membuat index mulai dari 1
+            df_display = df.copy()
+            df_display.index = range(1, len(df_display) + 1)
+
+            # Menampilkan semua data
+            st.dataframe(
+                df_display,
+                use_container_width=True
+            )
+
+            # =========================
+            # DISTRIBUSI HASIL
+            # =========================
             st.write("📊 Distribusi Hasil")
-            st.bar_chart(df["hasil"].value_counts())
 
+            st.bar_chart(
+                df["hasil"].value_counts()
+            )
+
+            # =========================
+            # PERSENTASE SENTIMEN
+            # =========================
             st.write("📈 Persentase Sentimen")
 
             total = len(df)
             counts = df["hasil"].value_counts()
 
             for label, count in counts.items():
-                st.write(f"**{label}** : {(count/total)*100:.2f}%")
 
+                st.write(
+                    f"**{label}** : {(count/total)*100:.2f}%"
+                )
+
+            # =========================
+            # DOWNLOAD CSV
+            # =========================
             csv = df.to_csv(index=False).encode('utf-8')
 
             st.download_button(
