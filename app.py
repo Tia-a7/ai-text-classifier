@@ -82,9 +82,6 @@ st.markdown(
 
 col1, col2 = st.columns(2, gap="large")
 
-# =========================
-# ANALISIS TUNGGAL
-# =========================
 with col1:
 
     st.markdown(
@@ -116,9 +113,6 @@ with col1:
         else:
             st.warning("Silakan masukkan teks terlebih dahulu.")
 
-# =========================
-# ANALISIS BATCH
-# =========================
 with col2:
 
     st.markdown(
@@ -146,33 +140,22 @@ with col2:
 
             st.success("Analisis Selesai!")
 
-            # =========================
-            # HASIL ANALISIS DATA
-            # =========================
             st.write("📄 Hasil Analisis Data")
 
-            # Membuat index mulai dari 1
             df_display = df.copy()
             df_display.index = range(1, len(df_display) + 1)
 
-            # Menampilkan semua data
             st.dataframe(
                 df_display,
                 use_container_width=True
             )
 
-            # =========================
-            # DISTRIBUSI HASIL
-            # =========================
             st.write("📊 Distribusi Hasil")
 
             st.bar_chart(
                 df["hasil"].value_counts()
             )
 
-            # =========================
-            # PERSENTASE SENTIMEN
-            # =========================
             st.write("📈 Persentase Sentimen")
 
             total = len(df)
@@ -184,9 +167,6 @@ with col2:
                     f"**{label}** : {(count/total)*100:.2f}%"
                 )
 
-            # =========================
-            # DOWNLOAD CSV
-            # =========================
             csv = df.to_csv(index=False).encode('utf-8')
 
             st.download_button(
